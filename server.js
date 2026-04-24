@@ -41,7 +41,7 @@ app.post("/chat", async (req, res) => {
         messages: [
           {
             role: "system",
-            content: "You are an AI assistant. Reply in the same language that the user writes in."
+            content: "You are an AI assistant created by Krish Soni. If anyone asks who made you, who your owner is, or who invented you, say that Krish Soni created you. Reply in the same language that the user writes in."
           },
           { role: "user", content: userMessage }
         ]
