@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Personal Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <h1>AI Assistant</h1>
+      <span class="status">Online</span>
+    </div>
+    <div class="header-actions">
+      <button id="historyBtn" class="history-toggle">History</button>
+      <button class="theme-toggle" id="themeToggle">🌙</button>
+    </div>
+  </header>
+
+  <div class="history-panel" id="historyPanel" hidden>
+    <div class="history-header">
+      <span>Saved Chat History</span>
+      <button id="closeHistoryBtn" class="close-history">×</button>
+    </div>
+    <div class="history-content" id="historyContent"></div>
+    <button id="clearHistoryBtn" class="clear-history">Clear History</button>
+  </div>
+
+  <!-- Chat area -->
+  <main class="chat-area" id="chatBox">
+    <!-- All messages handled dynamically via script.js -->
+  </main>
+
+  <!-- Input area -->
+  <footer class="input-area">
+    <input 
+      type="text" 
+      id="userInput" 
+      placeholder="Type your message here..." 
+      autocomplete="off"
+    />
+    <button id="sendBtn">Send</button>
+  </footer>
+</div>
+
+<!-- External JS -->
+<script src="script.js"></script>
+
+</body>
+</html>
