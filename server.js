@@ -9,7 +9,7 @@ const GROQ_KEY = process.env.GROQ_API_KEY;
 const GROQ_MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
 const GROQ_MAX_TOKENS = Number(process.env.GROQ_MAX_TOKENS) || 256;
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const WEATHER_GEO_URL = "https://geocode.maps.co/search";
+const WEATHER_GEO_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast";
 const EXCHANGE_API_URL = "https://api.exchangerate.host/latest";
 
@@ -34,12 +34,16 @@ function extractCurrencyPair(message) {
 }
 
 async function findLocation(location) {
-  const url = `${WEATHER_GEO_URL}?q=${encodeURIComponent(location)}&limit=1`;
+  const url = `${WEATHER_GEO_URL}?name=${encodeURIComponent(location)}&count=1`;
   const response = await fetch(url);
   if (!response.ok) return null;
   const data = await response.json();
-  if (!Array.isArray(data) || data.length === 0) return null;
-  return { name: data[0].display_name, lat: data[0].lat, lon: data[0].lon };
+  if (!data?.results?.length) return null;
+  return {
+    name: `${data.results[0].name}, ${data.results[0].country}`,
+    lat: data.results[0].latitude,
+    lon: data.results[0].longitude
+  };
 }
 
 function weatherCodeDescription(code) {
