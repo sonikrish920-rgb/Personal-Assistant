@@ -37,7 +37,7 @@ app.post("/chat", async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "tencent/hy3-preview:free",
+        model: "mistral-community/mistral-7b-instruct-v0.2:free",
         messages: [
           {
             role: "system",
