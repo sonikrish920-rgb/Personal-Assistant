@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistral-community/mistral-7b-instruct-v0.2:free",
+        model: "meta-llama/llama-2-7b-chat",
         messages: [
           {
             role: "system",
