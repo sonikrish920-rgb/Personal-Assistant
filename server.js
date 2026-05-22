@@ -5,11 +5,11 @@ const path = require("path");
 
 const app = express();
 
-const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-console.log("OPENROUTER_KEY LOADED:", Boolean(OPENROUTER_KEY));
-if (!OPENROUTER_KEY) {
-  console.warn("⚠️ OPENROUTER_API_KEY is not set. Please add it to .env or your environment.");
+const GROQ_KEY = process.env.GROQ_API_KEY;
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+console.log("GROQ_KEY LOADED:", Boolean(GROQ_KEY));
+if (!GROQ_KEY) {
+  console.warn("⚠️ GROQ_API_KEY is not set. Please add it to .env or your environment.");
 }
 
 app.use(cors());
@@ -25,19 +25,19 @@ app.post("/chat", async (req, res) => {
       return res.json({ reply: "Empty message" });
     }
 
-    if (!OPENROUTER_KEY) {
-      return res.status(500).json({ reply: "OpenRouter API key is not configured." });
+    if (!GROQ_KEY) {
+      return res.status(500).json({ reply: "Groq API key is not configured." });
     }
 
-    console.log("Using OpenRouter URL:", OPENROUTER_URL);
-    const response = await fetch(OPENROUTER_URL, {
+    console.log("Using Groq URL:", GROQ_URL);
+    const response = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OPENROUTER_KEY}`,
+        "Authorization": `Bearer ${GROQ_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "deepseek/deepseek-v4-flash:free",
+        model: "mixtral-8x7b-32768",
         messages: [
           {
             role: "system",
@@ -49,21 +49,21 @@ app.post("/chat", async (req, res) => {
     });
 
     const rawText = await response.text();
-    console.log("🧨 RAW OpenRouter RESPONSE ↓↓↓");
+    console.log("🧨 RAW Groq RESPONSE ↓↓↓");
     console.log(rawText);
 
     if (!response.ok) {
-      throw new Error(`OpenRouter API request failed (${response.status}): ${rawText}`);
+      throw new Error(`Groq API request failed (${response.status}): ${rawText}`);
     }
 
     let data;
     try {
       data = JSON.parse(rawText);
     } catch (e) {
-      throw new Error("OpenAI returned NON-JSON response");
+      throw new Error("Groq returned NON-JSON response");
     }
 
-    console.log("OpenRouter raw response:", data);
+    console.log("Groq raw response:", data);
 
     const reply = data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : "No response from AI";
 
