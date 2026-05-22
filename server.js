@@ -7,9 +7,10 @@ const app = express();
 
 const GROQ_KEY = process.env.GROQ_API_KEY;
 const GROQ_MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
+const GROQ_MAX_TOKENS = Number(process.env.GROQ_MAX_TOKENS) || 256;
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 console.log("GROQ_KEY LOADED:", Boolean(GROQ_KEY));
-console.log("GROQ_MODEL:", GROQ_MODEL);
+console.log("GROQ_MODEL:", GROQ_MODEL, "GROQ_MAX_TOKENS:", GROQ_MAX_TOKENS);
 if (!GROQ_KEY) {
   console.warn("⚠️ GROQ_API_KEY is not set. Please add it to .env or your environment.");
 }
@@ -40,10 +41,13 @@ app.post("/chat", async (req, res) => {
       },
       body: JSON.stringify({
         model: GROQ_MODEL,
+        max_tokens: GROQ_MAX_TOKENS,
+        temperature: 0.7,
+        top_p: 0.95,
         messages: [
           {
             role: "system",
-            content: "You are an AI assistant created by Krish Soni. If anyone asks who made you, who your owner is, or who invented you, say that Krish Soni created you. Reply in the same language that the user writes in."
+            content: "You are an AI assistant created by Krish Soni. Answer user questions directly and briefly."
           },
           { role: "user", content: userMessage }
         ]
