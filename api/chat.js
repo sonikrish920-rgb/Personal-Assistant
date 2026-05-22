@@ -1,4 +1,5 @@
 const GROQ_KEY = process.env.GROQ_API_KEY;
+const GROQ_MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 module.exports = async (req, res) => {
@@ -23,7 +24,7 @@ module.exports = async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "groq-1.5-mini",
+        model: GROQ_MODEL,
         messages: [
           {
             role: "system",

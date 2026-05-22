@@ -6,8 +6,10 @@ const path = require("path");
 const app = express();
 
 const GROQ_KEY = process.env.GROQ_API_KEY;
+const GROQ_MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 console.log("GROQ_KEY LOADED:", Boolean(GROQ_KEY));
+console.log("GROQ_MODEL:", GROQ_MODEL);
 if (!GROQ_KEY) {
   console.warn("⚠️ GROQ_API_KEY is not set. Please add it to .env or your environment.");
 }
@@ -37,7 +39,7 @@ app.post("/chat", async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "groq-1.5-mini",
+        model: GROQ_MODEL,
         messages: [
           {
             role: "system",
