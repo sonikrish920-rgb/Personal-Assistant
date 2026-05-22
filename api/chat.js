@@ -1,13 +1,13 @@
-const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+const GROQ_KEY = process.env.GROQ_API_KEY;
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  if (!OPENROUTER_KEY) {
-    return res.status(500).json({ error: "OpenRouter API key is not configured." });
+  if (!GROQ_KEY) {
+    return res.status(500).json({ error: "Groq API key is not configured." });
   }
 
   const userMessage = req.body?.message;
@@ -16,14 +16,14 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const response = await fetch(OPENROUTER_URL, {
+    const response = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OPENROUTER_KEY}`,
+        "Authorization": `Bearer ${GROQ_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "deepseek/deepseek-v4-flash:free",
+        model: "mixtral-8x7b-32768",
         messages: [
           {
             role: "system",
