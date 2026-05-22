@@ -37,7 +37,7 @@ app.post("/chat", async (req, res) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-2-7b-chat",
+        model: "deepseek/deepseek-v4-flash:free",
         messages: [
           {
             role: "system",
