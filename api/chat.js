@@ -1,7 +1,9 @@
 const {
   ASSISTANT_SYSTEM_PROMPT,
   getSafeProfileReply,
+  isIdentityQuestion,
   PRIVATE_INFO_REPLY,
+  UNKNOWN_IDENTITY_REPLY,
   handleOwnerVerification,
   isPrivateInfoRequest
 } = require("../assistant-policy");
@@ -119,6 +121,10 @@ module.exports = async (req, res) => {
 
   if (isPrivateInfoRequest(userMessage)) {
     return res.status(200).json({ reply: PRIVATE_INFO_REPLY });
+  }
+
+  if (isIdentityQuestion(userMessage)) {
+    return res.status(200).json({ reply: UNKNOWN_IDENTITY_REPLY });
   }
 
   const profileReply = getSafeProfileReply(userMessage);

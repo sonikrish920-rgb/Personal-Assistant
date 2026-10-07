@@ -1,10 +1,11 @@
 const crypto = require("crypto");
 
 const COOKIE_NAME = "pa_owner_state";
-const CHALLENGE = "If you're really Krish Soni, prove it. What is 2 + 2?";
+const CHALLENGE = "If you're really Krish Soni, prove it. What is 4 + 2 = ?";
 const VERIFIED_REPLY = "Yes. You are Krish Soni.";
 const FAILED_REPLY = "Verification failed.";
 const PRIVATE_INFO_REPLY = "I can confirm identity, but I can't disclose personal or private information.";
+const UNKNOWN_IDENTITY_REPLY = "I don't know you.";
 const SAFE_PROFILE_REPLY = "Krish Soni is a B.Tech Computer Science and Engineering student at SVCE Indore, currently in his 5th semester. He studies computer science, programming, DSA, web development, AI/ML, and cybersecurity, and is preparing for GATE 2027. His technical interests include software development, personal AI assistants, JavaScript/Node.js, React, and Git/GitHub. He is also interested in AI/ML, cybersecurity, DSA, and high-paying software engineering roles. His Chess.com ID is Kksoni007, and his Rapid rating is 2100.";
 const CREATOR_REPLY = "I was created by Krish Soni, a B.Tech Computer Science and Engineering student at SVCE Indore. His interests include software development, AI/ML, cybersecurity, DSA, and building software projects.";
 
@@ -106,6 +107,14 @@ function handleOwnerVerification(message, req, res, secret) {
   return null;
 }
 
+function isIdentityQuestion(message) {
+  const normalized = message.toLowerCase()
+    .replace(/[’]/g, "'")
+    .replace(/[?!.,]+$/g, "")
+    .trim();
+  return /^(?:who\s+am\s+i|who\s+i\s+am|who\s+i['’]?m|do\s+you\s+know\s+who\s+i\s+am|main\s+kaun\s+(?:hoon|hun|hu|hoo)|mai\s+kaun\s+(?:hoon|hun|hu|hoo)|mein\s+kaun\s+(?:hoon|hun|hu|hoo)|me\s+kaun\s+(?:hoon|hun|hu|hoo)|मैं\s+कौन\s+(?:हूँ|हूं|हू))$/iu.test(normalized);
+}
+
 function getSafeProfileReply(message) {
   const normalized = message.toLowerCase().replace(/[’]/g, "'");
   const asksAboutCreator = /\bwho\s+(?:built|created|made|developed)\s+you\b|\bwho\s+is\s+(?:your\s+)?(?:owner|creator)\b|\bwho\s+is\s+krish(?:\s+soni)?\b|\btell\s+me\s+about\s+krish(?:\s+soni)?\b|\bwhat\s+do\s+you\s+know\s+about\s+krish(?:\s+soni)?\b|\btell\s+me\s+(?:everything|all(?:\s+the)?)\s+you\s+know\s+about\s+krish(?:\s+soni)?\b|\bkrish(?:\s+soni)?\s+(?:kaun|kon)\s+hai\b|\b(?:tumhe|tumko)\s+kisne\s+banaya\b|\btumhara\s+owner\s+(?:kaun|kon)\s+hai\b|\bkrish(?:\s+soni)?\s+ke\s+baare?\s+me(?:\s+batao)?\b|(?:कृष्ण(?:\s+सोनी)?\s+कौन\s+है|तुम्हें\s+किसने\s+बनाया|तुम्हारा\s+(?:मालिक|owner)\s+कौन\s+है)/iu.test(normalized);
@@ -140,7 +149,9 @@ module.exports = {
   FAILED_REPLY,
   PRIVATE_INFO_REPLY,
   SAFE_PROFILE_REPLY,
+  UNKNOWN_IDENTITY_REPLY,
   getSafeProfileReply,
   handleOwnerVerification,
+  isIdentityQuestion,
   isPrivateInfoRequest
 };

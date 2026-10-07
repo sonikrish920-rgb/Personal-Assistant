@@ -5,7 +5,9 @@ const path = require("path");
 const {
   ASSISTANT_SYSTEM_PROMPT,
   getSafeProfileReply,
+  isIdentityQuestion,
   PRIVATE_INFO_REPLY,
+  UNKNOWN_IDENTITY_REPLY,
   handleOwnerVerification,
   isPrivateInfoRequest
 } = require("./assistant-policy");
@@ -132,6 +134,10 @@ app.post(["/chat", "/api/chat"], async (req, res) => {
 
     if (isPrivateInfoRequest(userMessage)) {
       return res.json({ reply: PRIVATE_INFO_REPLY });
+    }
+
+    if (isIdentityQuestion(userMessage)) {
+      return res.json({ reply: UNKNOWN_IDENTITY_REPLY });
     }
 
     const profileReply = getSafeProfileReply(userMessage);
