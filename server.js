@@ -4,6 +4,7 @@ require("dotenv").config();
 const path = require("path");
 const {
   ASSISTANT_SYSTEM_PROMPT,
+  getSafeProfileReply,
   PRIVATE_INFO_REPLY,
   handleOwnerVerification,
   isPrivateInfoRequest
@@ -111,7 +112,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.post("/chat", async (req, res) => {
+app.post(["/chat", "/api/chat"], async (req, res) => {
   try {
     console.log("🔥 /chat HIT");
 
@@ -131,6 +132,11 @@ app.post("/chat", async (req, res) => {
 
     if (isPrivateInfoRequest(userMessage)) {
       return res.json({ reply: PRIVATE_INFO_REPLY });
+    }
+
+    const profileReply = getSafeProfileReply(userMessage);
+    if (profileReply) {
+      return res.json({ reply: profileReply });
     }
 
     const lowerMessage = userMessage.toLowerCase();

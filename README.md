@@ -90,7 +90,7 @@ Keep credentials private. `.gitignore` excludes `.env` and `node_modules/`; do n
 npm start
 ```
 
-The Express server listens at `http://localhost:3000` and serves the static files from `public/`. Its chat endpoint is `POST /chat`, with a JSON body containing `message`. For example, in PowerShell:
+The Express server listens at `http://localhost:3000` and serves the static files from `public/`. It accepts chat requests at both `POST /chat` and `POST /api/chat`, with a JSON body containing `message`. For example, in PowerShell:
 
 ```powershell
 Invoke-RestMethod -Uri http://localhost:3000/chat `
@@ -98,8 +98,6 @@ Invoke-RestMethod -Uri http://localhost:3000/chat `
   -ContentType "application/json" `
   -Body '{"message":"Hello"}'
 ```
-
-> **Local interface note:** The browser currently sends messages to `/api/chat`, while the standalone Express server implements `/chat`. Vercel provides the `/api/*` route through its serverless handler; local API requests can be sent directly to `/chat`.
 
 ## 🧭 How it works
 
@@ -112,7 +110,9 @@ Invoke-RestMethod -Uri http://localhost:3000/chat `
 
 An explicit first-person claim to be Krish Soni or the owner prompts an identity challenge. Only the configured response passes; incorrect responses fail without revealing it. The response accepts harmless whitespace and capitalization differences.
 
-Successful verification confirms identity only. It is tracked in a signed, `HttpOnly`, `SameSite=Strict` cookie for the browser session. Verification does not authorize disclosure of personal details, private context, or stored information; requests for such information are refused whether or not the session is verified. Mentioning Krish in an ordinary question does not by itself start verification.
+Successful verification confirms identity only. It is tracked in a signed, `HttpOnly`, `SameSite=Strict` cookie for the browser session. Basic profile context may be shared when relevant, but verification does not authorize disclosure of sensitive details, private context, credentials, or stored private information. Mentioning Krish in an ordinary question does not by itself start verification.
+
+The available non-sensitive profile identifies Krish as a B.Tech Computer Science & Engineering student at SVCE Indore, currently in the 5th semester. His studies include Computer Science subjects, programming, DSA, web development, AI/ML, cybersecurity, and GATE 2027 preparation. His technical interests include personal AI assistants, JavaScript/Node.js, React, Git/GitHub, software development, AI/ML, cybersecurity, and DSA. He is interested in software engineering roles and has a Chess.com ID of `Kksoni007` with a Rapid rating of 2100.
 
 ## 🔌 API
 
@@ -126,7 +126,7 @@ The Vercel serverless endpoint is `POST /api/chat`. Send JSON such as:
 
 A successful response contains a `reply` string. The endpoint returns JSON errors for unsupported methods, missing messages, or a missing Groq API key. Weather and exchange-rate lookup failures normally return a fallback reply; other upstream or parsing failures may return an error.
 
-The local Express endpoint is `POST /chat` and accepts the same message body.
+The local Express endpoints `POST /chat` and `POST /api/chat` accept the same message body.
 
 ## 🧪 Tests
 
