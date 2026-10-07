@@ -117,15 +117,15 @@ function isIdentityQuestion(message) {
 
 function getSafeProfileReply(message) {
   const normalized = message.toLowerCase().replace(/[’]/g, "'");
-  const asksAboutCreator = /\bwho\s+(?:build|built|created|made|developed)\s+you\b|\bkrish(?:\s+soni)?\s+who\b|\bwho\s+is\s+(?:your\s+)?(?:owner|creator)\b|\bwho\s+is\s+krish(?:\s+soni)?\b|\btell\s+me\s+about\s+krish(?:\s+soni)?\b|\bwhat\s+do\s+you\s+know\s+about\s+krish(?:\s+soni)?\b|\btell\s+me\s+(?:everything|all(?:\s+the)?)\s+you\s+know\s+about\s+krish(?:\s+soni)?\b|\bkrish(?:\s+soni)?\s+(?:kaun|kon)\s+hai\b|\b(?:tumhe|tumko)\s+kisne\s+banaya\b|\btumhara\s+owner\s+(?:kaun|kon)\s+hai\b|\bkrish(?:\s+soni)?\s+ke\s+baare?\s+me(?:\s+batao)?\b|(?:कृष्ण(?:\s+सोनी)?\s+कौन\s+है|तुम्हें\s+किसने\s+बनाया|तुम्हारा\s+(?:मालिक|owner)\s+कौन\s+है)/iu.test(normalized);
-  const asksAboutProfileDetail = /\b(?:what|where|tell\s+me|describe|which|how)\b[\s\S]*\bkrish(?:\s+soni)?\b[\s\S]*\b(?:study|studies|studying|college|semester|degree|course|interest|project|career|chess|rating|id|skills?)\b|\bkrish(?:\s+soni)?\s+(?:ka|ki|ke)\s+(?:college|padhai|degree|semester|interests?|projects?|career|chess|rating|id)\b|(?:कृष्ण(?:\s+सोनी)?\s+(?:का|की|के)\s+(?:कॉलेज|पढ़ाई|डिग्री|सेमेस्टर|रुचि|प्रोजेक्ट|करियर|शतरंज|रेटिंग))/iu.test(normalized);
+  const asksAboutCreator = /\bwho\s+(?:build|built|created|made|developed)\s+you\b|\bwho\s+is\s+(?:your\s+)?(?:owner|creator)\b|\bwho\s+is\s+krish(?:\s+soni)?\b|\btell\s+me\s+about\s+krish(?:\s+soni)?\b|\bwhat\s+do\s+you\s+know\s+about\s+krish(?:\s+soni)?\b|\btell\s+me\s+(?:everything|all(?:\s+the)?)\s+you\s+know\s+about\s+krish(?:\s+soni)?\b|\bkrish(?:\s+soni)?\s+(?:kaun|kon)\s+hai\b|\b(?:tumhe|tumko)\s+kisne\s+banaya\b|\btumhara\s+owner\s+(?:kaun|kon)\s+hai\b|\bkrish(?:\s+soni)?\s+ke\s+baare?\s+me(?:\s+batao)?\b|(?:कृष्ण(?:\s+सोनी)?\s+कौन\s+है|तुम्हें\s+किसने\s+बनाया|तुम्हारा\s+(?:मालिक|owner)\s+कौन\s+है)/iu.test(normalized);
+  const asksAboutProfileDetail = /\bkrish(?:\s+soni)?\s+who\b|\b(?:what|where|tell\s+me|describe|which|how)\b[\s\S]*\bkrish(?:\s+soni)?\b[\s\S]*\b(?:study|studies|studying|college|semester|degree|course|interest|project|career|chess|rating|id|skills?)\b|\bkrish(?:\s+soni)?\s+(?:ka|ki|ke)\s+(?:college|padhai|degree|semester|interests?|projects?|career|chess|rating|id)\b|(?:कृष्ण(?:\s+सोनी)?\s+(?:का|की|के)\s+(?:कॉलेज|पढ़ाई|डिग्री|सेमेस्टर|रुचि|प्रोजेक्ट|करियर|शतरंज|रेटिंग))/iu.test(normalized);
 
   if (!asksAboutCreator && !asksAboutProfileDetail) return null;
   if (/\b(?:private|personal|sensitive|secret|password|api[\s_-]*key|token|credential|financial|bank|address|location|phone|email|family|file|memory|verification|challenge)\b/i.test(normalized)) {
     return null;
   }
 
-  return asksAboutCreator && /\b(?:who\s+(?:build|built|created|made|developed)\s+you|krish(?:\s+soni)?\s+who|who\s+is\s+(?:your\s+)?(?:owner|creator)|(?:tumhe|tumko)\s+kisne\s+banaya|tumhara\s+owner)\b/i.test(normalized)
+  return asksAboutCreator && /\b(?:who\s+(?:build|built|created|made|developed)\s+you|who\s+is\s+(?:your\s+)?(?:owner|creator)|(?:tumhe|tumko)\s+kisne\s+banaya|tumhara\s+owner)\b/i.test(normalized)
     ? CREATOR_REPLY
     : SAFE_PROFILE_REPLY;
 }

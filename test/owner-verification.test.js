@@ -146,11 +146,12 @@ test("normal questions about Krish do not start verification and receive only th
     "who created you",
     "who made you",
     "tumhe kisne banaya",
-    "tumko kisne banaya",
-    "krish soni who"
+    "tumko kisne banaya"
   ]) {
     assert.equal(getSafeProfileReply(question), CREATOR_REPLY, question);
   }
+  assert.equal(getSafeProfileReply("krish who"), SAFE_PROFILE_REPLY);
+  assert.equal(getSafeProfileReply("krish soni who"), SAFE_PROFILE_REPLY);
   assert.equal(getSafeProfileReply("Who is Krish Soni?"), SAFE_PROFILE_REPLY);
   assert.match(SAFE_PROFILE_REPLY, /B\.Tech Computer Science and Engineering student/);
   assert.match(SAFE_PROFILE_REPLY, /SVCE Indore/);
@@ -265,6 +266,8 @@ test("Vercel chat endpoint deterministically handles creator questions and prote
     ["who built you", CREATOR_REPLY],
     ["who created you", CREATOR_REPLY],
     ["who made you", CREATOR_REPLY],
+    ["krish who", SAFE_PROFILE_REPLY],
+    ["krish soni who", SAFE_PROFILE_REPLY],
     ["Who is your owner?", CREATOR_REPLY],
     ["What is Krish's college?", SAFE_PROFILE_REPLY],
     ["What is Krish's Chess.com ID?", SAFE_PROFILE_REPLY],
