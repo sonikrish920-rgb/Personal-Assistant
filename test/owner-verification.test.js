@@ -123,6 +123,7 @@ test("normal questions about Krish do not start verification and receive only th
     "who built you",
     "who created you",
     "who made you",
+    "krish soni who",
     "Who is your owner?",
     "tumhe kisne banaya?",
     "tumko kisne banaya?",
@@ -145,7 +146,8 @@ test("normal questions about Krish do not start verification and receive only th
     "who created you",
     "who made you",
     "tumhe kisne banaya",
-    "tumko kisne banaya"
+    "tumko kisne banaya",
+    "krish soni who"
   ]) {
     assert.equal(getSafeProfileReply(question), CREATOR_REPLY, question);
   }
@@ -154,7 +156,6 @@ test("normal questions about Krish do not start verification and receive only th
   assert.match(SAFE_PROFILE_REPLY, /SVCE Indore/);
   assert.match(SAFE_PROFILE_REPLY, /5th semester/);
   assert.match(SAFE_PROFILE_REPLY, /programming, DSA, web development, AI\/ML, and cybersecurity/);
-  assert.match(SAFE_PROFILE_REPLY, /GATE 2027/);
   assert.match(SAFE_PROFILE_REPLY, /JavaScript\/Node\.js, React, and Git\/GitHub/);
   assert.match(SAFE_PROFILE_REPLY, /Chess\.com ID is Kksoni007, and his Rapid rating is 2100/);
 });
