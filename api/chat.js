@@ -1,5 +1,6 @@
 const {
   ASSISTANT_SYSTEM_PROMPT,
+  getSafeProfileReply,
   PRIVATE_INFO_REPLY,
   handleOwnerVerification,
   isPrivateInfoRequest
@@ -118,6 +119,11 @@ module.exports = async (req, res) => {
 
   if (isPrivateInfoRequest(userMessage)) {
     return res.status(200).json({ reply: PRIVATE_INFO_REPLY });
+  }
+
+  const profileReply = getSafeProfileReply(userMessage);
+  if (profileReply) {
+    return res.status(200).json({ reply: profileReply });
   }
 
   const lowerMessage = userMessage.toLowerCase();
