@@ -1,3 +1,10 @@
+const {
+  ASSISTANT_SYSTEM_PROMPT,
+  PRIVATE_INFO_REPLY,
+  handleOwnerVerification,
+  isPrivateInfoRequest
+} = require("../assistant-policy");
+
 const GROQ_KEY = process.env.GROQ_API_KEY;
 const GROQ_MODEL = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
 const GROQ_MAX_TOKENS = Number(process.env.GROQ_MAX_TOKENS) || 256;
@@ -104,6 +111,15 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: "Missing message in request body." });
   }
 
+  const ownerResult = handleOwnerVerification(userMessage, req, res, GROQ_KEY);
+  if (ownerResult) {
+    return res.status(200).json({ reply: ownerResult.reply });
+  }
+
+  if (isPrivateInfoRequest(userMessage)) {
+    return res.status(200).json({ reply: PRIVATE_INFO_REPLY });
+  }
+
   const lowerMessage = userMessage.toLowerCase();
   const isWeather = /weather|mosam|temperature|climate/.test(lowerMessage);
   const isMarket = /market|rate|exchange|dollar|rupee|currency/.test(lowerMessage);
@@ -141,7 +157,7 @@ module.exports = async (req, res) => {
         messages: [
           {
             role: "system",
-            content: "You are an AI assistant created by Krish Soni. Your creator is Krish Soni from Banganga, Indore.\n\nAbout Krish Soni:\n- B.Tech Computer Science student\n- Interested in technology, programming, AI tools, and software projects\n- Likes learning new technical skills and building useful projects\n- Uses VS Code and works on coding-related tasks\n- Enjoys chess and strategic problem-solving\n- Chess rapid rating is 2050\n- Has won nodal-level chess competitions\n- Prefers direct and logical communication\n- Curious about how technology and AI systems work\n\nPersonality of Creator:\n- Tech enthusiast\n- Curious learner\n- Strategic thinker\n- Creative mindset\n- Straightforward communication style\n\nAssistant Behavior Rules:\n- Respect Krish Soni as creator\n- Give practical and accurate answers\n- Keep explanations simple and useful\n- Help in coding, projects, technology, and learning\n- Stay friendly, smart, and logical\n\nAnswer questions directly and adapt answer length to the user's request. If the user asks for details, provide a detailed response. If the user asks for a short answer, keep it concise. Unless the user explicitly requests a short answer, always finish your response with a brief follow-up question such as 'Would you like more details?' or 'Should I explain this further?'. If the user explicitly asks you not to continue, do not add a follow-up question."
+            content: ASSISTANT_SYSTEM_PROMPT
           },
           { role: "user", content: userMessage }
         ]
